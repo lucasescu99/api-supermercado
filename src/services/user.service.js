@@ -1,4 +1,8 @@
 const userDao = require('../dao/user.dao');
+const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
+const SECRET_TOKEN = require("../../config/settings").apiSecret;
+const SALT = require("../../config/settings").saltRounds;
 
 class userService {
   static async signUp(email, password, userName, firstName, lastName) {
@@ -6,18 +10,21 @@ class userService {
     const exists = result[0].exists;
 
     if (exists > 0)
-      throw {status: 409, error: 'email_in_use', msg: 'Email en uso'};
+      throw {error: 'email_in_use', msg: 'Email en uso'};
 
-    const user = [email, password, userName, firstName, lastName];
-
-    return userDao.signUp(user);
+    bcrypt.genSalt(SALT, function(err, salt) {
+      bcrypt.hash(password, salt, function(err, hash) {
+          // Store hash in your password DB.
+          const user = [email, hash, userName, firstName, lastName];
+          return userDao.signUp(user);
+      });
+    });  
   }
 
   static async update(id, email, userName, firstName, lastName) {
     const exists = await userDao.exists(id, 'id');
     if (exists[0].exists === 0)
       throw {
-        status: 404,
         error: 'user_not_found',
         msg: 'Usuario no encontrado',
       };
@@ -29,7 +36,6 @@ class userService {
     const exists = await userDao.exists(id, 'id');
     if (exists[0].exists === 0)
       throw {
-        status: 404,
         error: 'user_not_found',
         msg: 'Usuario no encontrado',
       };
@@ -41,12 +47,39 @@ class userService {
     const exists = await userDao.exists(id, 'id');
     if (exists[0].exists === 0)
       throw {
-        status: 404,
         error: 'user_not_found',
         msg: 'Usuario no encontrado',
       };
 
     return userDao.get(id);
+  }
+
+  static async login(email, password) {
+    const result = await userDao.exists(email, 'email');
+    const exists = result[0].exists;
+
+    if (exists > 0)
+      throw {
+        error: 'user_not_found', 
+        msg: 'User is incorrect'
+      };
+
+    const user = await userDao.getUser(email);
+
+    bcrypt.compare(password, user.password, function(err, result) {
+        if (err) {
+          throw {
+            error: err,
+            msg: "Ooops something went wrong"
+          }
+        }
+      // Token
+      const token = jwt.sign({
+        exp: Math.floor(Date.now() / 1000) + (60 * 60),
+        data: email
+      }, SECRET_TOKEN);
+        return token
+    });
   }
 }
 

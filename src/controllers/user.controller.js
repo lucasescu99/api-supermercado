@@ -123,6 +123,18 @@ class userController {
       return res.status(status).send(error);
     }
   }
+
+  static async login(req, res) {
+    
+    const {email, password} = req.body;
+
+    try {
+      const result = await userService.login(email, password);
+      return res.status(200).send(result);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  }
 }
 
 module.exports = userController;
