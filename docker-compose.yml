@@ -9,10 +9,10 @@ services:
   local:
     build:
       context: .
-    image: plataforma5-backend
+    image: supermercado-backend
     volumes:
       - ./src:/app/src
-    container_name: plataforma5-backend_local
+    container_name: supermercado-backend_local
     environment: *common-variables
     depends_on:
       - mysql
@@ -24,22 +24,22 @@ services:
   test:
     build:
       context: .
-    image: plataforma5-backend
+    image: supermercado-backend
     volumes:
       - ./src:/app/src
       - ./coverage/unit:/app/coverage
-    container_name: plataforma5-backend_test
+    container_name: supermercado-backend_test
     environment: *common-variables
     tty: true
     entrypoint: ['npm', 'test']
   integration-test:
     build:
       context: .
-    image: plataforma5-backend
+    image: supermercado-backend
     volumes:
       - ./src:/app/src
       - ./coverage/integration:/app/coverage
-    container_name: plataforma5-backend_integration
+    container_name: supermercado-backend_integration
     environment:
       <<: *common-variables
       NODE_ENV: test
@@ -49,7 +49,7 @@ services:
     entrypoint: ['npm', 'run', 'integration']
   mysql:
     image: mysql:5.7
-    container_name: plataforma5-database_mysql
+    container_name: supermercado-database_mysql
     ports:
       - 3306:3306
     volumes:
@@ -60,4 +60,4 @@ services:
       MYSQL_PASSWORD: testpass
 networks:
   default:
-    name: plataforma5-backend
+    name: supermercado-backend

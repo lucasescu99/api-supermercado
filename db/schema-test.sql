@@ -24,11 +24,33 @@ CREATE TABLE IF NOT EXISTS `User` (
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS `Cart` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `userId` VARCHAR(255) NULL,
+  `status` ENUM('active', 'closed'),
+  `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `Product` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `category` VARCHAR(255) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  'stock' INT DEFAULT 0,
+  `description` VARCHAR(255) NOT NULL,
+  `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
 LOCK TABLES `User` WRITE;
+LOCK TABLES `Cart` WRITE;
+LOCK TABLES `Product` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
 INSERT INTO `User` (id,userName,email,passwordEncrypted,firstName,lastName)
 values
 (1,'userName', 'user@mail.com', '$2a$10$y1YpEHpRV7FH9WE./JA5k.ZWNYiMmifrojBXuOtdNukcPxj2FRWYe', 'Juan', 'Sanchez');
+
+
 
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
