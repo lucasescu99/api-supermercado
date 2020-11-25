@@ -74,7 +74,10 @@ class userService {
       );
       if (valid) return token;
     } catch (err) {
-      return err;
+      return {
+        error: "wrong_password",
+        msg: "Password is incorrect"
+      };
     }
   }
 }

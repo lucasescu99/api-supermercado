@@ -237,9 +237,6 @@ describe("user Controller", () => {
   });
   describe("login user", () => {
     it("should pass with 200 ", async () => {
-      const req = {
-        params: { id: "1" }
-      };
       const mock = [
         {
           email: "lucasescudero2013@gmail.com",
@@ -249,37 +246,43 @@ describe("user Controller", () => {
 
       const result = [
         {
-          id: "1",
-          userName: "userName",
-          email: "email@email.com",
-          lastName: "lastName",
-          firstName: "firstName",
-          createdAt: "2019-09-03T16:27:20.000Z"
+          "authentication": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MDYyNjcyNjksImlhdCI6MTYwNjI2MzY2OX0.aXvVPWhcRsRgRaSto_GH0ocbIAqrOCMgDV1QBeVa3YI"
         }
       ];
 
-      userService.get.mockImplementationOnce(() => mock);
+      userService.login.mockImplementationOnce(() => mock);
 
-      await userController.get(req, res);
+      await userController.login(req, res);
       expect(statusMock).toBeCalledWith(200);
       expect(sendMock).toBeCalledWith(expect.objectContaining(result));
     });
 
-    it("should pass with 404 user not found ", async () => {
-      const req = {
-        params: { id: "1" }
-      };
+    it("should pass with 400 email not found", async () => {
 
-      userService.get.mockImplementationOnce(() => {
+      userService.login.mockImplementationOnce(() => {
         throw {
-          status: 404,
+          status: 400,
           error: "user_not_found",
-          msg: "Usuario no encontrado"
+          msg: "User is incorrect"
         };
       });
 
-      await userController.get(req, res);
-      expect(statusMock).toBeCalledWith(404);
+      await userController.login(req, res);
+      expect(statusMock).toBeCalledWith(400);
+    });
+
+    it("should pass with 400 if password is incorrect", async () => {
+
+      userService.login.mockImplementationOnce(() => {
+        throw {
+          status: 400,
+          error: "wrong_password",
+          msg: "Password is incorrect"
+        };
+      });
+
+      await userController.login(req, res);
+      expect(statusMock).toBeCalledWith(400);
     });
   });
 });
