@@ -238,10 +238,10 @@ describe("user Controller", () => {
   describe("login user", () => {
     it("should pass with 200 ", async () => {
       const mock = [
-        {
+        {body: {
           email: "lucasescudero2013@gmail.com",
           password: "hola1234chau"
-        }
+        }}
       ];
 
       const result = [
@@ -250,9 +250,9 @@ describe("user Controller", () => {
         }
       ];
 
-      userService.login.mockImplementationOnce(() => mock);
+      userService.login.mockImplementationOnce(() => mock[0]);
 
-      await userController.login(req, res);
+      await userController.login(mock[0], res);
       expect(statusMock).toBeCalledWith(200);
       expect(sendMock).toBeCalledWith(expect.objectContaining(result));
     });
