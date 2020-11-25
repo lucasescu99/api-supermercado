@@ -16,13 +16,13 @@ class userDao {
   }
 
   static get(id) {
-    const sql = `SELECT * User WHERE id = ?`;
+    const sql = `SELECT * from User WHERE id = ?`;
 
     return query(sql, id);
   }
 
   static getUser(email) {
-    const sql = `SELECT * User WHERE email = ${email}`;
+    const sql = `SELECT * from User WHERE email = '${email}'`;
 
     return query(sql, email);
   }
