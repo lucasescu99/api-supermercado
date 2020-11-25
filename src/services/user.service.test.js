@@ -124,4 +124,40 @@ describe('User Service', () => {
       expect(result).toEqual(0);
     });
   });
+  describe('Login', () => {
+    it('should fail with 400 if user is not found', async () => {
+      const mock = [{exists: 0}];
+      const resultError = {
+        error: 'user_not_found',
+        msg: 'User is incorrect',
+      };
+
+      userDao.exists.mockImplementationOnce(() => mock);
+
+      try {
+        await userService.login();
+      } catch (error) {
+        expect(error).toEqual(resultError);
+      }
+    });
+
+    it('should succeed with 200 and return token', async () => {
+      const mock = [{exists: 1}];
+
+      userDao.exists.mockImplementationOnce(() => mock);
+      const mockBody = [
+        {
+          email: "lucasescudero2013@gmail.com",
+          password: "hola1234chau"
+        }
+      ];
+      const result =  {
+          "authentication": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MDYyNjcyNjksImlhdCI6MTYwNjI2MzY2OX0.aXvVPWhcRsRgRaSto_GH0ocbIAqrOCMgDV1QBeVa3YI"
+      };
+
+      userDao.getUser.mockImplementationOnce(() => mockBody[0].email);
+
+      expect(result).toEqual(result);
+    });
+  });
 });
