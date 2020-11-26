@@ -1,7 +1,8 @@
-const express = require('express');
-const userController = require('./controllers/user.controller');
+const express = require("express");
+const userController = require("./controllers/user.controller");
+const productController = require("./controllers/product.controller");
 const router = express.Router();
-const version = require('../config/settings').version;
+const version = require("../config/settings").version;
 
 /* User */
 
@@ -11,4 +12,11 @@ router.post(`/${version}/login`, userController.login);
 router.put(`/${version}/users/:id`, userController.update);
 router.delete(`/${version}/users/:id`, userController.delete);
 
-module.exports = {router, version};
+/* Product */
+
+router.get(`/${version}/products/:id`, productController.get);
+router.post(`/${version}/products`, productController.add);
+router.put(`/${version}/products/:id`, productController.update);
+router.delete(`/${version}/products/:id`, productController.delete);
+
+module.exports = { router, version };
