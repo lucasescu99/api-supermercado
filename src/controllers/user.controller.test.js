@@ -1,7 +1,7 @@
-const userController = require('./user.controller');
-const userService = require('../services/user.service.js');
+const userController = require("./user.controller");
+const userService = require("../services/user.service.js");
 
-jest.mock('../services/user.service.js');
+jest.mock("../services/user.service.js");
 
 let sendMock;
 let statusMock;
@@ -14,81 +14,81 @@ beforeEach(() => {
   statusMock.mockImplementation(() => res);
 });
 
-describe('user Controller', () => {
-  describe('sign up method', () => {
-    it('should fail with 400 if email is missing', async () => {
+describe("user Controller", () => {
+  describe("sign up method", () => {
+    it("should fail with 400 if email is missing", async () => {
       const req = {
         body: {
-          password: 'password',
-          firstName: 'firstName',
-          lastName: 'lastName',
-          userName: 'userName'
+          password: "password",
+          firstName: "firstName",
+          lastName: "lastName",
+          userName: "userName"
         }
       };
 
       await userController.signUp(req, res);
       expect(statusMock).toBeCalledWith(400);
     });
-    it('should fail with 400 if password is missing', async () => {
+    it("should fail with 400 if password is missing", async () => {
       const req = {
         body: {
-          email: 'email@test.com',
-          firstName: 'firstName',
-          lastName: 'lastName',
-          userName: 'userName'
+          email: "email@test.com",
+          firstName: "firstName",
+          lastName: "lastName",
+          userName: "userName"
         }
       };
 
       await userController.signUp(req, res);
       expect(statusMock).toBeCalledWith(400);
     });
-    it('should fail with 400 if firstName is missing', async () => {
+    it("should fail with 400 if firstName is missing", async () => {
       const req = {
         body: {
-          email: 'email@test.com',
-          password: 'password',
-          lastName: 'lastName',
-          userName: 'userName'
+          email: "email@test.com",
+          password: "password",
+          lastName: "lastName",
+          userName: "userName"
         }
       };
 
       await userController.signUp(req, res);
       expect(statusMock).toBeCalledWith(400);
     });
-    it('should fail with 400 if lastName is missing', async () => {
+    it("should fail with 400 if lastName is missing", async () => {
       const req = {
         body: {
-          email: 'email@test.com',
-          password: 'password',
-          firstName: 'firstName',
-          userName: 'userName'
+          email: "email@test.com",
+          password: "password",
+          firstName: "firstName",
+          userName: "userName"
         }
       };
 
       await userController.signUp(req, res);
       expect(statusMock).toBeCalledWith(400);
     });
-    it('should fail with 400 if userName is missing', async () => {
+    it("should fail with 400 if userName is missing", async () => {
       const req = {
         body: {
-          email: 'email@test.com',
-          password: 'password',
-          firstName: 'firstName',
-          lastName: 'lastName'
+          email: "email@test.com",
+          password: "password",
+          firstName: "firstName",
+          lastName: "lastName"
         }
       };
 
       await userController.signUp(req, res);
       expect(statusMock).toBeCalledWith(400);
     });
-    it('should pass with 200 and create user', async () => {
+    it("should pass with 200 and create user", async () => {
       const req = {
         body: {
-          email: 'email@test.com',
-          password: 'password',
-          firstName: 'firstName',
-          lastName: 'lastName',
-          userName: 'userName'
+          email: "email@test.com",
+          password: "password",
+          firstName: "firstName",
+          lastName: "lastName",
+          userName: "userName"
         }
       };
       const mock = {};
@@ -98,14 +98,14 @@ describe('user Controller', () => {
       expect(statusMock).toBeCalledWith(200);
     });
   });
-  describe('/put update user info', () => {
-    it('should fail with 400 if email is sent with wrong type', async () => {
+  describe("/put update user info", () => {
+    it("should fail with 400 if email is sent with wrong type", async () => {
       const req = {
         body: {
           email: 1,
-          userName: 'userName',
-          firstName: 'firstName',
-          lastName: 'lastName'
+          userName: "userName",
+          firstName: "firstName",
+          lastName: "lastName"
         },
         params: { id: 1 }
       };
@@ -113,13 +113,13 @@ describe('user Controller', () => {
       await userController.update(req, res);
       expect(statusMock).toBeCalledWith(400);
     });
-    it('should fail with 400 if userName is sent with wrong type', async () => {
+    it("should fail with 400 if userName is sent with wrong type", async () => {
       const req = {
         body: {
-          email: 'test@mail.com',
+          email: "test@mail.com",
           userName: 1,
-          firstName: 'firstName',
-          lastName: 'lastName'
+          firstName: "firstName",
+          lastName: "lastName"
         },
         params: { id: 1 }
       };
@@ -127,13 +127,13 @@ describe('user Controller', () => {
       await userController.update(req, res);
       expect(statusMock).toBeCalledWith(400);
     });
-    it('should fail with 400 if firstName is sent with wrong type', async () => {
+    it("should fail with 400 if firstName is sent with wrong type", async () => {
       const req = {
         body: {
           email: 1,
-          userName: 'userName',
+          userName: "userName",
           firstName: 1,
-          lastName: 'lastName'
+          lastName: "lastName"
         },
         params: { id: 1 }
       };
@@ -141,12 +141,12 @@ describe('user Controller', () => {
       await userController.update(req, res);
       expect(statusMock).toBeCalledWith(400);
     });
-    it('should fail with 400 if lastName is sent with wrong type', async () => {
+    it("should fail with 400 if lastName is sent with wrong type", async () => {
       const req = {
         body: {
           email: 1,
-          userName: 'userName',
-          firstName: 'firstName',
+          userName: "userName",
+          firstName: "firstName",
           lastName: 1
         },
         params: { id: 1 }
@@ -155,13 +155,13 @@ describe('user Controller', () => {
       await userController.update(req, res);
       expect(statusMock).toBeCalledWith(400);
     });
-    it('should succeed with 200 and update user info', async () => {
+    it("should succeed with 200 and update user info", async () => {
       const req = {
         body: {
-          email: 'test@mail.com',
-          userName: 'userName',
-          firstName: 'firstName',
-          lastName: 'lastName'
+          email: "test@mail.com",
+          userName: "userName",
+          firstName: "firstName",
+          lastName: "lastName"
         },
         params: { id: 1 }
       };
@@ -173,8 +173,8 @@ describe('user Controller', () => {
       expect(statusMock).toBeCalledWith(200);
     });
   });
-  describe('delete single user', () => {
-    it('should succeed with 200 and delete user', async () => {
+  describe("delete single user", () => {
+    it("should succeed with 200 and delete user", async () => {
       const req = { params: { id: 1 } };
 
       const mock = {};
@@ -184,30 +184,30 @@ describe('user Controller', () => {
       expect(statusMock).toBeCalledWith(200);
     });
   });
-  describe('get single user', () => {
-    it('should pass with 200 ', async () => {
+  describe("get single user", () => {
+    it("should pass with 200 ", async () => {
       const req = {
-        params: { id: '1' }
+        params: { id: "1" }
       };
       const mock = [
         {
-          id: '1',
-          userName: 'userName',
-          email: 'email@email.com',
-          lastName: 'lastName',
-          firstName: 'firstName',
-          createdAt: '2019-09-03T16:27:20.000Z'
+          id: "1",
+          userName: "userName",
+          email: "email@email.com",
+          lastName: "lastName",
+          firstName: "firstName",
+          createdAt: "2019-09-03T16:27:20.000Z"
         }
       ];
 
       const result = [
         {
-          id: '1',
-          userName: 'userName',
-          email: 'email@email.com',
-          lastName: 'lastName',
-          firstName: 'firstName',
-          createdAt: '2019-09-03T16:27:20.000Z'
+          id: "1",
+          userName: "userName",
+          email: "email@email.com",
+          lastName: "lastName",
+          firstName: "firstName",
+          createdAt: "2019-09-03T16:27:20.000Z"
         }
       ];
 
@@ -218,16 +218,63 @@ describe('user Controller', () => {
       expect(sendMock).toBeCalledWith(expect.objectContaining(result));
     });
 
-    it('should pass with 404 user not found ', async () => {
+    it("should pass with 404 user not found ", async () => {
       const req = {
-        params: { id: '1' }
+        params: { id: "1" }
       };
 
       userService.get.mockImplementationOnce(() => {
         throw {
           status: 404,
-          error: 'user_not_found',
-          msg: 'Usuario no encontrado'
+          error: "user_not_found",
+          msg: "Usuario no encontrado"
+        };
+      });
+
+      await userController.get(req, res);
+      expect(statusMock).toBeCalledWith(404);
+    });
+  });
+  describe("login user", () => {
+    it("should pass with 200 ", async () => {
+      const req = {
+        params: { id: "1" }
+      };
+      const mock = [
+        {
+          email: "lucasescudero2013@gmail.com",
+          password: "hola1234chau"
+        }
+      ];
+
+      const result = [
+        {
+          id: "1",
+          userName: "userName",
+          email: "email@email.com",
+          lastName: "lastName",
+          firstName: "firstName",
+          createdAt: "2019-09-03T16:27:20.000Z"
+        }
+      ];
+
+      userService.get.mockImplementationOnce(() => mock);
+
+      await userController.get(req, res);
+      expect(statusMock).toBeCalledWith(200);
+      expect(sendMock).toBeCalledWith(expect.objectContaining(result));
+    });
+
+    it("should pass with 404 user not found ", async () => {
+      const req = {
+        params: { id: "1" }
+      };
+
+      userService.get.mockImplementationOnce(() => {
+        throw {
+          status: 404,
+          error: "user_not_found",
+          msg: "Usuario no encontrado"
         };
       });
 
