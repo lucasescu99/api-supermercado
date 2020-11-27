@@ -62,15 +62,19 @@ class userService {
         msg: "User is incorrect"
       };
 
-    const user = await userDao.getUser(email);
+    const [user] = await userDao.getUser(email);
     try {
       let valid = bcrypt.compare(password, user.passwordEncrypted);
       const token = jwt.sign(
         {
-          exp: Math.floor(Date.now() / 1000) + 60 * 60,
+          // check: true,
+          role: "user",
           data: user.email
         },
-        SECRET_TOKEN
+        SECRET_TOKEN,
+        {
+          expiresIn: Math.floor(Date.now() / 1000) + 60 * 60
+        }
       );
       if (valid) return token;
     } catch (err) {

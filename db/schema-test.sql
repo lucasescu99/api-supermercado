@@ -21,16 +21,17 @@ CREATE TABLE IF NOT EXISTS `User` (
   `passwordEncrypted` VARCHAR(255) NULL,
   `firstName` VARCHAR(255) NULL,
   `lastName` VARCHAR(255) NULL,
+  `role` ENUM('user', 'admin') DEFAULT 'user',
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+  ENGINE = InnoDB;
 
 
-LOCK TABLES `User` WRITE;
+-- LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` (id,userName,email,passwordEncrypted,firstName,lastName)
+INSERT INTO `User` (id,userName,email,passwordEncrypted,firstName,lastName,role)
 values
-(1,'userName', 'user@mail.com', '$2a$10$y1YpEHpRV7FH9WE./JA5k.ZWNYiMmifrojBXuOtdNukcPxj2FRWYe', 'Juan', 'Sanchez');
+(1,'userName', 'user@mail.com', '$2a$10$y1YpEHpRV7FH9WE./JA5k.ZWNYiMmifrojBXuOtdNukcPxj2FRWYe', 'Juan', 'Sanchez','admin');
 
 UNLOCK TABLES;
 
@@ -38,16 +39,16 @@ CREATE TABLE IF NOT EXISTS `Product` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `category` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
-  'stock' INT DEFAULT 0,
+  `stock` INT DEFAULT 0,
   `description` VARCHAR(255) NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+  ENGINE = InnoDB;
 
-LOCK TABLES `Product` WRITE;
+-- LOCK TABLES `Product` WRITE;
 INSERT INTO `Product` (id,category,name,stock,description)
 values
-(1,'almacen', 'pan', 20, 'mucha harina hace mal');
+(1,'almacen','pan',20,'mucha harina hace mal');
 
 UNLOCK TABLES;
 
@@ -59,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `Cart` (
   `status` ENUM('active', 'closed'),
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+  ENGINE = InnoDB;
 
 
 

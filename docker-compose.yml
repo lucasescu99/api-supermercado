@@ -51,7 +51,7 @@ services:
     image: mysql:5.7
     container_name: supermercado-database_mysql
     ports:
-      - 3306:3306
+      - 3309:3309
     volumes:
       - ./db/schema-test.sql:/docker-entrypoint-initdb.d/schema-test.sql
     environment:

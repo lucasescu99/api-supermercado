@@ -1,0 +1,22 @@
+[
+    {
+      "group": "user",
+      "permissions": [
+        {
+          "resource": "*",
+          "methods": "*",
+          "action": "allow"
+        }
+      ]
+    },
+    {
+      "group": "user",
+      "permissions": [
+        {
+          "resource": "/1/products",
+          "methods": ["POST", "GET", "PUT"],
+          "action": "allow"
+        }
+      ]
+    }
+]
