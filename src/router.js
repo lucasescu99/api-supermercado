@@ -4,13 +4,12 @@ const productController = require("./controllers/product.controller");
 const router = express.Router();
 const version = require("../config/settings").version;
 const acl = require('express-acl')
-const auth = require('./middlewares')
+const auth = require('./middlewares/index')
 
 // Acl config
 acl.config({
     baseUrl: version,
-    path: 'src',
-    action: 'allow'
+    path: 'src' 
 });
 
 /* User */

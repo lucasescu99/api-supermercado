@@ -65,10 +65,10 @@ class userService {
     const [user] = await userDao.getUser(email);
     try {
       let valid = bcrypt.compare(password, user.passwordEncrypted);
+      console.log("User %j",user)
       const token = jwt.sign(
         {
-          // check: true,
-          role: "user",
+          role: user.role,
           data: user.email
         },
         SECRET_TOKEN,

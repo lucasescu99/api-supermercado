@@ -1,6 +1,6 @@
 [
     {
-      "group": "user",
+      "group": "admin",
       "permissions": [
         {
           "resource": "*",
@@ -8,12 +8,13 @@
           "action": "allow"
         }
       ]
+      
     },
     {
       "group": "user",
       "permissions": [
         {
-          "resource": "/1/products",
+          "resource": "/products",
           "methods": ["POST", "GET", "PUT"],
           "action": "allow"
         }
