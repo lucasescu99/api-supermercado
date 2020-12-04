@@ -1,7 +1,8 @@
-function checkId(req, res) {
-  if (!req.body.id) {
-    return res.status(404).status("User doesn't exist bruh.");
+function checkId(req) {
+  if (req.decoded.data != req.params.id) {
+    return false
   }
+  return true
 }
 
 module.exports = {

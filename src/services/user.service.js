@@ -20,7 +20,7 @@ class userService {
     });
   }
 
-  static async update(id, email, userName, firstName, lastName) {
+  static async update(id, email, userName, firstName, lastName,role) {
     const exists = await userDao.exists(id, "id");
     if (exists[0].exists === 0)
       throw {
@@ -28,7 +28,7 @@ class userService {
         msg: "Usuario no encontrado"
       };
 
-    return userDao.update(email, userName, firstName, lastName);
+    return userDao.update(id,email, userName, firstName, lastName,role);
   }
 
   static async delete(id) {
@@ -69,7 +69,7 @@ class userService {
       const token = jwt.sign(
         {
           role: user.role,
-          data: user.email
+          data: user.id
         },
         SECRET_TOKEN,
         {

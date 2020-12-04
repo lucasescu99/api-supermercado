@@ -17,6 +17,11 @@
           "resource": "/products",
           "methods": ["POST", "GET", "PUT"],
           "action": "allow"
+        },
+        {
+          "resource": "/users/*",
+          "methods": ["DELETE","PUT"],
+          "action": "allow"
         }
       ]
     }

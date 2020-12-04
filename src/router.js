@@ -17,8 +17,8 @@ acl.config({
 router.get(`/${version}/users/:id`, userController.get);
 router.post(`/${version}/users`, userController.signUp);
 router.post(`/${version}/login`, userController.login);
-router.put(`/${version}/users/:id`, userController.update);
-router.delete(`/${version}/users/:id`, userController.delete);
+router.put(`/${version}/users/:id`,auth,acl.authorize, userController.update);
+router.delete(`/${version}/users/:id`,auth,acl.authorize, userController.delete);
 
 /* Product */
 

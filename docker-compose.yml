@@ -16,11 +16,21 @@ services:
     environment: *common-variables
     depends_on:
       - mysql
+      - localstack
     ports:
       - '3000:3000'
       - '9229:9229'
     tty: true
     entrypoint: ['npm', 'run', 'local']
+  localstack:
+    image: localstack/localstack
+    container_name: notifications-component_localstack
+    environment:
+      SERVICES: sns
+      DEFAULT_REGION: us-east-2
+    ports:
+      - 8070:8080
+      - 4575:4575
   test:
     build:
       context: .

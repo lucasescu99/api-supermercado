@@ -1,5 +1,6 @@
 const userService = require("../services/user.service");
 const { generateUuid } = require("../utils/uuid.utils");
+const { checkId } = require("../utils/index")
 
 class userController {
   static async signUp(req, res) {
@@ -50,9 +51,13 @@ class userController {
 
     console.log("Call %s %s id: %s", req.method, req.url, callId);
 
-    const { email, userName, firstName, lastName } = req.body;
+    const { email, userName, firstName, lastName, role } = req.body;
     const { id } = req.params;
 
+    if(!checkId(req)){
+      return res.status(404).send("User doesn't exist bruh.");
+    }
+    console.log("Ojo q pasa!")
     if (
       (email && typeof email !== "string") ||
       (userName && typeof userName !== "string") ||
@@ -69,7 +74,7 @@ class userController {
 
     try {
       console.log("Call id: %s response: success", callId);
-      await userService.update(id, email, userName, firstName, lastName);
+      await userService.update(id, email, userName, firstName, lastName,role);
 
       return res.status(200).send();
     } catch (error) {
@@ -86,22 +91,24 @@ class userController {
     const callId = generateUuid();
 
     console.log("Call %s %s id: %s", req.method, req.url, callId);
-
+    console.log("Decoded!!!",req.decoded)
     const { id } = req.params;
-
-    try {
-      console.log("Call id: %s response: success", callId);
-      await userService.delete(id);
-
-      return res.status(200).send();
-    } catch (error) {
-      console.log("Call id: %s error:%s", callId, JSON.stringify(error));
-      const status = error.status;
-
-      if (status === undefined) return res.status(500).send();
-
-      return res.status(status).send(error);
+    if(!checkId(req)){
+      return res.status(404).send("User doesn't exist bruh.");
     }
+      try {
+        console.log("Call id: %s response: success", callId);
+        await userService.delete(id);
+  
+        return res.status(200).send();
+      } catch (error) {
+        console.log("Call id: %s error:%s", callId, JSON.stringify(error));
+        const status = error.status;
+  
+        if (status === undefined) return res.status(404).send("User doesnt exist");
+  
+        return res.status(status).send(error);
+      }
   }
 
   static async get(req, res) {
@@ -118,7 +125,7 @@ class userController {
       console.log("Call id: %s error:%s", callId, JSON.stringify(error));
       const status = error.status;
 
-      if (status === undefined) return res.status(500).send();
+      if (status === undefined) return res.status(404).send();
 
       return res.status(status).send(error);
     }
