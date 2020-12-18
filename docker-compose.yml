@@ -1,10 +1,13 @@
-version: '3.7'
+version: "3.7"
 x-common-variables: &common-variables
   NODE_ENV: local
   DB_MAIN_HOST: mysql
   DB_MAIN_USER: root
   DB_MAIN_PASS: root
   DB_MAIN_NAME: main_db
+  AWS_ACCESS_KEY_ID: anykey
+  AWS_SECRET_ACCESS_KEY: anysecret
+  AWS_DEFAULT_REGION: us-east-2
 services:
   local:
     build:
@@ -17,10 +20,34 @@ services:
     depends_on:
       - mysql
     ports:
-      - '3000:3000'
-      - '9229:9229'
+      - "3000:3000"
+      - "9229:9229"
     tty: true
-    entrypoint: ['npm', 'run', 'local']
+    entrypoint: ["npm", "run", "local"]
+  localstack:
+    image: localstack/localstack:0.11.4
+    container_name: notifications-component_localstack
+    environment:
+      SERVICES: sqs,sns,dynamodb
+      DEFAULT_REGION: us-east-2
+    ports:
+      - 8070:8080
+      - 4576:4576
+      - 4575:4575
+      - "4569:4569"
+  setup:
+    image: mesosphere/aws-cli
+    container_name: notifications-component_setup
+    volumes:
+      - ./scripts/local:/setup
+    environment:
+      AWS_ACCESS_KEY_ID: anykey
+      AWS_SECRET_ACCESS_KEY: anysecret
+      AWS_DEFAULT_REGION: us-east-2
+    depends_on:
+      - localstack
+    entrypoint: [""]
+    command: ["/setup/setup.sh"]
   test:
     build:
       context: .
@@ -31,7 +58,7 @@ services:
     container_name: supermercado-backend_test
     environment: *common-variables
     tty: true
-    entrypoint: ['npm', 'test']
+    entrypoint: ["npm", "test"]
   integration-test:
     build:
       context: .
@@ -46,7 +73,7 @@ services:
     depends_on:
       - mysql
     tty: true
-    entrypoint: ['npm', 'run', 'integration']
+    entrypoint: ["npm", "run", "integration"]
   mysql:
     image: mysql:5.7
     container_name: supermercado-database_mysql
