@@ -1,4 +1,5 @@
 const userDao = require("../dao/user.dao");
+const messageRepository = require("../repositories/message.repository");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const SECRET_TOKEN = require("../../config/settings").apiSecret;
@@ -11,10 +12,13 @@ class userService {
 
     if (exists > 0) throw { error: "email_in_use", msg: "Email en uso" };
 
-    bcrypt.genSalt(SALT, function(err, salt) {
-      bcrypt.hash(password, salt, function(err, hash) {
+    bcrypt.genSalt(SALT, function (err, salt) {
+      bcrypt.hash(password, salt, function (err, hash) {
         // Store hash in your password DB.
         const user = [email, hash, userName, firstName, lastName];
+
+        messageRepository.sendMessage("sing up", user);
+
         return userDao.signUp(user);
       });
     });
@@ -25,7 +29,7 @@ class userService {
     if (exists[0].exists === 0)
       throw {
         error: "user_not_found",
-        msg: "Usuario no encontrado"
+        msg: "Usuario no encontrado",
       };
 
     return userDao.update(email, userName, firstName, lastName);
@@ -36,7 +40,7 @@ class userService {
     if (exists[0].exists === 0)
       throw {
         error: "user_not_found",
-        msg: "Usuario no encontrado"
+        msg: "Usuario no encontrado",
       };
 
     return userDao.delete(id);
@@ -47,7 +51,7 @@ class userService {
     if (exists[0].exists === 0)
       throw {
         error: "user_not_found",
-        msg: "Usuario no encontrado"
+        msg: "Usuario no encontrado",
       };
 
     return userDao.get(id);
@@ -59,7 +63,7 @@ class userService {
     if (exists < 1)
       throw {
         error: "user_not_found",
-        msg: "User is incorrect"
+        msg: "User is incorrect",
       };
 
     const user = await userDao.getUser(email);
@@ -68,7 +72,7 @@ class userService {
       const token = jwt.sign(
         {
           exp: Math.floor(Date.now() / 1000) + 60 * 60,
-          data: user.email
+          data: user.email,
         },
         SECRET_TOKEN
       );
@@ -76,7 +80,7 @@ class userService {
     } catch (err) {
       return {
         error: "wrong_password",
-        msg: "Password is incorrect"
+        msg: "Password is incorrect",
       };
     }
   }
